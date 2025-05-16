@@ -1,35 +1,69 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import { checkInventoryLevels } from './services/inventoryService.js';
+import readline from 'readline';
+import {consumeStock,showSystemStatus} from './services/inventoryService.js';
 import { handleDisruptions } from './services/disruptionService.js';
 import { optimizeRoutes } from './services/optimizationService.js';
 
-import { vehicles, packages } from './data/sampleData.js';
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
-console.log('🚀 Iniciando simulación logística...\n');
+function showMenu() {
+  console.clear();
+  console.log('🚛 SISTEMA LOGÍSTICO MULTICIUDAD - MODO SIMULACIÓN');
+  console.log('--------------------------------------------------');
+  console.log('[1] Verificando disrupciones');
+  console.log('[2] Optimizar rutas y despachar paquetes');
+  console.log('[3] Ejecutar ciclo completo de operación');
+  console.log('[0] Salir');
+  console.log('--------------------------------------------------');
+}
 
-// 1. Verificar niveles de inventario
-console.log('📦 Verificando inventario...');
-checkInventoryLevels();
+function promptUser() {
+  showMenu();
+  rl.question('\nSeleccione una opción: ', (input) => {
+    switch (input.trim()) {
 
-console.log('\n🚧 Comprobando disrupciones...');
-handleDisruptions();
+      case '1':
+        console.clear();
+        console.log('🚨 Procesando disrupciones...');
+        handleDisruptions();
+        returnToMenu();
+        break;
 
-console.log('\n🗺️ Optimizando rutas de entrega...');
-optimizeRoutes();
+      case '2':
+        console.clear();
+        console.log('📍 Optimizando rutas y despachando paquetes...');
+        optimizeRoutes();
+        consumeStock();
+        returnToMenu();
+        break;
 
-console.log('\n📊 Estado final del sistema:\n');
+      case '3':
+        console.clear();
+        console.log('📊 Estado actual del sistema:');
+        showSystemStatus();
+        returnToMenu();
+        break;
 
-// Mostrar paquetes y vehículos
-console.log('🚚 Vehículos:');
-vehicles.forEach(v =>
-  console.log(`ID: ${v.vehicle_id}, Estado: ${v.status}, Ruta: ${v.current_route_id || 'Ninguna'}`)
-);
+      case '0':
+        console.log('\n✅ Simulación finalizada. ¡Gracias por usar el sistema!');
+        rl.close();
+        break;
 
-console.log('\n📦 Paquetes:');
-packages.forEach(p =>
-  console.log(`ID: ${p.package_id}, Estado: ${p.status}, Vehículo: ${p.vehicle_id || 'Ninguno'}`)
-);
+      default:
+        console.log('❌ Opción inválida. Intente nuevamente.');
+        returnToMenu();
+        break;
+    }
+  });
+}
 
-console.log('\n✅ Simulación finalizada.\n');
+function returnToMenu() {
+  rl.question('\nPresione Enter para volver al menú...', () => {
+    console.clear();
+    promptUser();
+  });
+}
+
+promptUser();
