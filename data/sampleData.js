@@ -1,14 +1,14 @@
-import { Warehouse } from '../models/warehouse.js';
 import { Inventory } from '../models/inventory.js';
 import { DeliveryVehicle } from '../models/deliveryVehicle.js';
 import { Package } from '../models/package.js';
 import { RetailPartner } from '../models/retailPartner.js';
 import { Route } from '../models/route.js';
+import { Werehouse } from '../models/warehouse.js';
 
 // Warehouses
 const warehouses = [
-  new Warehouse(1, 'Bogotá', 500),
-  new Warehouse(2, 'Medellín', 300),
+  new Werehouse(1, 'Bogotá', 500),
+  new Werehouse(2, 'Medellín', 300),
 ];
 
 // Inventory
