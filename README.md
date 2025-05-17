@@ -62,5 +62,5 @@ It models a multi-city delivery network with warehouses, vehicles, partners, rou
 ```
 ```bash
 4. Run the simulation
-✅ npm run simulation
+✅ npm run simulate
 ```
